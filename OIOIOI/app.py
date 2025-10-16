@@ -58,27 +58,24 @@ zwraca: "TAK" , jeżeli 5 >= 8 * 1 , w przeciwnym wypadku "NIE"
 
 
 """
-
-################################################################################################
+# ________________________________________________________________________ #
 """
 **************************
 _  Tura I | 13.10.2025   _
-~~~~~~~~~rpk.pdf~~~~~~~~~~
-~~~~   n = 3a + 8b    ~~~~
-~ min_b = (2(n % 3) % 3) ~
+~~~~~~~~~han.pdf~~~~~~~~~~
+
 - Grzegorz Tereszkiewicz -
 ************************** 
 """
 
-# def sil(ciezar: int) -> str:
-#     mod = ciezar % 3
-#     min_b = (2 * mod) % 3
-#     return "TAK" if ciezar >= 8 * min_b else "NIE"
+def han(ilosc_klockow: int, ilosc_stosow: int) -> int:
+    ...
 
-# def main() -> None:
-#     n, m = map(int, input().split())
-#     print(sil(n))
 
-# if __name__ == "__main__":
-#     main()
+def main() -> None:
+    n, m = map(int, input().split())
+    print(han(n, m))
+
+if __name__ == "__main__":
+    main()
 
