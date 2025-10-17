@@ -15,3 +15,8 @@ build
 c_cpp_properties.json
 settings.json
 .clangd
+AGH/C++/src/main.cpp
+AGH/dokumenty/zgloszenie.pdf
+.gitignore
+AGH/dokumenty/Zgłoszenie1848.pdf
+AGH/dokumenty/FormularzZgloszeniowy-Grzegorz_Tereszkiewicz.pdf

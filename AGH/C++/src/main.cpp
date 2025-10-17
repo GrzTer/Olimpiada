@@ -5,7 +5,7 @@
 #include <unordered_set>
 #include <algorithm>
 using namespace std;
-// /*
+/*
 vector<string> zbierz_wszystkie_linie(const vector<string>& plansza, int rozmiar_N);
 bool jest_palindrom(const string& s);
 vector<string> zbierz_wszystkie_palindromy(const vector<string>& linie, int min_dlugosc);
@@ -92,4 +92,12 @@ int main() {
     cout << rozwiazanie << '\n';
     return 0;
 }
-// */
+*/
+
+
+
+int main() {
+
+    cout << "Hello, AGH!" << endl;
+    return 0;
+}
