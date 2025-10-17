@@ -98,7 +98,7 @@ if __name__ == "__main__":
 """
 
 ########### Interpretacja python do zadania podzial.pdf, do wykonania w C++ ###########
-
+"""
 import math
 
 def czy_liczba_pierwsza(liczba: int) -> bool:
@@ -140,4 +140,12 @@ def main() -> None:
         print("BRAK")
 
 if __name__ == "__main__":
+    main()
+"""
+
+########### Interpretacja python do zadania .pdf, do wykonania w C++ ###########
+
+def main() -> None: ...
+
+if __name == "__main__":
     main()
