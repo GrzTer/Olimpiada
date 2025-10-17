@@ -97,3 +97,47 @@ if __name__ == "__main__":
     main()
 """
 
+########### Interpretacja python do zadania podzial.pdf, do wykonania w C++ ###########
+
+import math
+
+def czy_liczba_pierwsza(liczba: int) -> bool:
+    if liczba < 2: return False
+    for i in range(2, int(math.sqrt(liczba)) + 1):
+        if liczba % i == 0: return False
+    return True
+
+def czy_unikalne_cyfry(podciag: str) -> bool: return len(set(podciag)) == len(podciag) 
+
+def znajdz_minimalny_podzial(ciag_cyfr: str) -> int | None:
+    dlugosc_ciagu = len(ciag_cyfr)
+    nieskonczonosc = float('inf')
+
+    min_podzialy = [nieskonczonosc] * (dlugosc_ciagu + 1)
+    min_podzialy[0] = 0
+
+    for i in range(1, dlugosc_ciagu + 1):
+        for j in range(i):
+            fragment = ciag_cyfr[j:i]
+            if min_podzialy[j] != nieskonczonosc:
+                if czy_unikalne_cyfry(fragment):
+                    liczba = int(fragment)
+                    if czy_liczba_pierwsza(liczba):
+                        min_podzialy[i] = min(min_podzialy[i], min_podzialy[j] + 1)
+    wynik = min_podzialy[dlugosc_ciagu]
+
+    if wynik == nieskonczonosc: return None
+    return wynik
+
+def main() -> None: 
+    ciag_cyfr = input().strip()
+
+    wynik = znajdz_minimalny_podzial(ciag_cyfr)
+
+    if wynik is not None and wynik >= 2:
+        print(wynik)
+    else:
+        print("BRAK")
+
+if __name__ == "__main__":
+    main()
