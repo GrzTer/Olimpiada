@@ -143,7 +143,7 @@ if __name__ == "__main__":
     main()
 """
 
-########### Interpretacja python do zadania .pdf, do wykonania w C++ ###########
+########### Interpretacja python do zadania algebraf.pdf, do wykonania w C++ ###########
 
 def main() -> None: ...
 
