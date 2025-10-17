@@ -1,25 +1,95 @@
 #include <iostream>
-#include <stdio.h>
+#include <vector>
+#include <string>
 #include <unordered_map>
-#include <numeric>
-#include <conio.h>
-#include <math.h>
+#include <unordered_set>
+#include <algorithm>
+using namespace std;
+// /*
+vector<string> zbierz_wszystkie_linie(const vector<string>& plansza, int rozmiar_N);
+bool jest_palindrom(const string& s);
+vector<string> zbierz_wszystkie_palindromy(const vector<string>& linie, int min_dlugosc);
+string znajdz_rozwiazanie(const vector<string>& palindromy, int min_liczba_wystapien);
 
-static bool running = true;
+// ================================
+//             Palindrom
+// ================================
 
-
-    /*******************************
-                Zadanie 
-    ********************************/
-void Zadanie()
-{
-    std::cout << "\n==================== Zadanie  ====================\n";
-
+bool jest_palindrom(const string& s) {
+    int l = 0, r = (int)s.size() - 1;
+    while (l < r) if (s[l++] != s[r--]) return false;
+    return true;
 }
 
+vector<string> zbierz_wszystkie_linie(const vector<string>& plansza, int rozmiar_N) {
+    vector<string> linie;
 
-int main()
-{
-    Zadanie();
+    linie.insert(linie.end(), plansza.begin(), plansza.end());
+
+    for (int kolumna = 0; kolumna < rozmiar_N; ++kolumna) {
+        string linia; linia.reserve(rozmiar_N);
+        for (int wiersz = 0; wiersz < rozmiar_N; ++wiersz)
+            linia.push_back(plansza[wiersz][kolumna]);
+        linie.push_back(std::move(linia));
+    }
+
+    for (int przesuniecie = 1 - rozmiar_N; przesuniecie < rozmiar_N; ++przesuniecie) {
+        string linia;
+        for (int wiersz = 0; wiersz < rozmiar_N; ++wiersz) {
+            int kolumna = wiersz - przesuniecie;
+            if (0 <= kolumna && kolumna < rozmiar_N) linia.push_back(plansza[wiersz][kolumna]);
+        }
+        if (!linia.empty()) linie.push_back(std::move(linia));
+    }
+
+    for (int suma = 0; suma < 2 * rozmiar_N - 1; ++suma) {
+        string linia;
+        for (int wiersz = 0; wiersz < rozmiar_N; ++wiersz) {
+            int kolumna = suma - wiersz;
+            if (0 <= kolumna && kolumna < rozmiar_N) linia.push_back(plansza[wiersz][kolumna]);
+        }
+        if (!linia.empty()) linie.push_back(std::move(linia));
+    }
+    return linie;
+}
+
+vector<string> zbierz_wszystkie_palindromy(const vector<string>& linie, int min_dlugosc) {
+    vector<string> wynik;
+    for (const string& linia : linie) {
+        int L = (int)linia.size();
+        for (int dl = max(min_dlugosc, 1); dl <= L; ++dl) {
+            for (int i = 0; i + dl <= L; ++i) {
+                string frag = linia.substr(i, dl);
+                if (jest_palindrom(frag)) wynik.push_back(std::move(frag));
+            }
+        }
+    }
+    return wynik;
+}
+
+string znajdz_rozwiazanie(const vector<string>& palindromy, int min_liczba_wystapien) {
+    unordered_map<string, int> licznik;
+    for (const auto& p : palindromy) ++licznik[p];
+
+    unordered_set<string> widziane;
+    for (const auto& p : palindromy) {
+        if (!widziane.insert(p).second) continue;
+        if (licznik[p] >= min_liczba_wystapien) return p;
+    }
+    return "";
+}
+
+int main() {
+    int rozmiar_N;
+    cin >> rozmiar_N;
+    vector<string> plansza(rozmiar_N);
+    for (int i = 0; i < rozmiar_N; ++i) cin >> plansza[i];
+
+    vector<string> linie = zbierz_wszystkie_linie(plansza, rozmiar_N);
+    vector<string> palindromy = zbierz_wszystkie_palindromy(linie, 5);
+    string rozwiazanie = znajdz_rozwiazanie(palindromy, 2);
+
+    cout << rozwiazanie << '\n';
     return 0;
 }
+// */

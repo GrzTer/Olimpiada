@@ -1,3 +1,4 @@
+"""
 from collections import Counter
 
 def zbierz_wszystkie_linie(plansza: list[str], rozmiar_N: int) -> list[str]:
@@ -53,5 +54,6 @@ def main():
 
 if __name__ == "__main__":
     main()
+"""
 
     ################################ Interpretacja python do zadania palindrom.pdf, do wykonania w C++ ################################
