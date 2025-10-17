@@ -93,11 +93,58 @@ int main() {
     return 0;
 }
 */
+// /*
+#include <iostream>
+#include <vector>
+#include <unordered_map>
+using namespace std;
 
+// ================================
+//             Skoczek
+// ================================
+
+int minimalna_liczba_skokow(const vector<int>& napoje) {
+    int dlugosc_N = (int)napoje.size();
+
+    if (dlugosc_N == 0) return -1;
+    if (dlugosc_N == 1) return 0;
+
+    unordered_map<int, int> warstwa{ {0, napoje[0] } }, nowa_warstwa;
+    int skoki = 0;
+
+    while (!warstwa.empty()) {
+        ++skoki; nowa_warstwa.clear();
+
+        for (auto& para : warstwa) {
+            int pozycja = para.first, energia = para.second;
+            int maks_skok = min(energia, dlugosc_N - 1 - pozycja);
+
+            for (int zasieg = 1; zasieg <= maks_skok; ++zasieg) {
+                int nowa_pozycja = pozycja + zasieg;
+                int energia_po_skoku = energia - zasieg + napoje[nowa_pozycja];
+
+                if (nowa_pozycja == dlugosc_N - 1) return skoki;
+
+                if (energia_po_skoku > nowa_warstwa[nowa_pozycja]) nowa_warstwa[nowa_pozycja] = energia_po_skoku;
+            }
+        }
+        warstwa.swap(nowa_warstwa);
+    }
+    return -1;
+}
 
 
 int main() {
+    int N;
+    cin >> N;
+    vector<int> napoje(N);
+    for (int i = 0; i < N; ++i) cin >> napoje[i];
 
-    cout << "Hello, AGH!" << endl;
+    int wynik = minimalna_liczba_skokow(napoje);
+    if (wynik < 0) cout << "BRAK\n";
+    else cout << wynik << '\n';
+
     return 0;
 }
+// */
+

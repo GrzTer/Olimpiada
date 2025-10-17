@@ -1,3 +1,4 @@
+########### Interpretacja python do zadania palindrom.pdf, do wykonania w C++ ###########
 """
 from collections import Counter
 
@@ -56,4 +57,42 @@ if __name__ == "__main__":
     main()
 """
 
-    ################################ Interpretacja python do zadania palindrom.pdf, do wykonania w C++ ################################
+########### Interpretacja python do zadania skoczek.pdf, do wykonania w C++ ###########
+# """
+def minimalna_liczba_skokow(napoje: list[int]) -> int:
+    dlugosc_N = len(napoje)
+    if dlugosc_N == 0: return "BRAK"
+    elif dlugosc_N == 1: return 0
+
+    miejsca: dict[int, int] = {0: napoje[0]}
+    skoki: int = 0
+
+    while miejsca:
+        skoki += 1
+        nowe_miejsca: dict[int, int] = {}
+        
+        for pozycja, energia in miejsca.items():
+            najdalszy_skok = min(energia, dlugosc_N - 1 - pozycja)
+            for zasieg in range(1, najdalszy_skok + 1):
+                cel = pozycja + zasieg
+                energia_po_skok = energia - zasieg + napoje[cel]
+                
+                if cel == dlugosc_N - 1: return skoki
+                
+                if energia_po_skok > nowe_miejsca.get(cel, -1): nowe_miejsca[cel] = energia_po_skok
+        print(f"Runda {skoki}: {miejsca}")
+        miejsca = nowe_miejsca
+
+    return "BRAK"
+
+def main() -> None: 
+    N = int(input())
+    napoje: list[int] = []
+    while len(napoje) < N: napoje.extend(map(int, input().split()))
+    napoje = napoje[:N]
+    wynik = minimalna_liczba_skokow(napoje)
+    print(wynik)
+
+if __name__ == "__main__":
+    main()
+# """
