@@ -97,4 +97,3 @@ if __name__ == "__main__":
     main()
 """
 
-########### Interpretacja python do zadania podzial.pdf, do wykonania w C++ ###########
