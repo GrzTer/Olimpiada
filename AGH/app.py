@@ -14,8 +14,8 @@ def zbierz_wszystkie_linie(plansza: list[str], rozmiar_N: int) -> list[str]:
             linie.append(przekatna)
 
     for i in range(2 * rozmiar_N - 1):
-        anty_przekatna = "".join(plansza[wiersz][wiersz - i] for wiersz in range(rozmiar_N) if 0 <= wiersz - i < rozmiar_N)
-        if przekatna:
+        anty_przekatna = "".join(plansza[wiersz][i - wiersz] for wiersz in range(rozmiar_N) if 0 <= wiersz - i < rozmiar_N)
+        if anty_przekatna:
             linie.append(anty_przekatna)
     return linie
 
