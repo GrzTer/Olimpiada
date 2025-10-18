@@ -147,9 +147,7 @@ int main() {
     return 0;
 }
 */
-
-
-/**/
+/*
 #include <vector>
 #include <string>
 #include <iostream>
@@ -212,15 +210,93 @@ int main() {
 
     return 0;
 }
+*/
+// /*
+#include <iostream>
+#include <vector>
+#include <string>
+#include <unordered_map>
+#include <set>
+#include <algorithm>
 
-/*
+using namespace std;
 
 // ================================
 //             Algebraf
 // ================================
 
-int main() {
-   return 0;
+string zmien_na_liczbe(const string& slowo, const unordered_map<char, int>& mapa) {
+    string tekst_liczby;
+    for (char litera : slowo) tekst_liczby += '0' + mapa.at(litera);
+    return tekst_liczby;
 }
 
-*/
+bool sprawdz_przypisanie (const vector<tuple<string, string, string>>& rownania, const unordered_map<char, int>& mapa) {
+    for (const auto& eq : rownania) {
+        string arg1s, arg2s, wyniks;
+        tie(arg1s, arg2s, wyniks) = eq;
+        long long arg1 = stoll(zmien_na_liczbe(arg1s, mapa));
+        long long arg2 = stoll(zmien_na_liczbe(arg2s, mapa));
+        long long wynik = stoll(zmien_na_liczbe(wyniks, mapa));
+        if (arg1 + arg2 != wynik) return false;
+    }
+    return true;
+}
+
+
+void rozwiaz_algebraf(int indeks, const vector<tuple<string, string, string>>& rownania, const vector<char>& litery, vector<string>& rozwiazania, vector<int>& przypisania, vector<bool>& uzyte_cyfry) {
+    if (indeks == litery.size()) {
+        unordered_map<char, int> mapa;
+        for (int i = 0; i < litery.size(); ++i) mapa[litery[i]] = przypisania[i];
+        if (sprawdz_przypisanie(rownania, mapa)) {
+            string rozws;
+            for (int cyfra : przypisania) rozws += '0' + cyfra;
+            rozwiazania.push_back(rozws);
+        }
+        return;        
+    }
+    for (int cyfra = 1; cyfra <= 9; ++cyfra) {
+        if (!uzyte_cyfry[cyfra]){
+            uzyte_cyfry[cyfra] = true;
+            przypisania[indeks] = cyfra;
+            rozwiaz_algebraf(indeks + 1, rownania, litery, rozwiazania, przypisania, uzyte_cyfry);
+            uzyte_cyfry[cyfra] = false;
+        }
+    }
+}
+
+int main() {
+    int liczba_rownan; cin >> liczba_rownan;
+    vector<tuple<string, string, string>> rownania;
+    set<char> wszystkie_litery;
+    
+    for (int i = 0; i < liczba_rownan; ++i) {
+        string linia; cin >> linia;
+        size_t plus_poz = linia.find('+');
+        size_t rowna_poz = linia.find('=');
+        string arg1 = linia.substr(0, plus_poz);
+        string arg2 = linia.substr(plus_poz + 1, rowna_poz - plus_poz - 1);
+        string wynik = linia.substr(rowna_poz + 1);
+        rownania.push_back(make_tuple(arg1, arg2, wynik));
+        for (char c : arg1) wszystkie_litery.insert(c);
+        for (char c : arg2) wszystkie_litery.insert(c);
+        for (char c : wynik) wszystkie_litery.insert(c);
+    }
+    
+    vector<char> posortowane_litery(wszystkie_litery.begin(), wszystkie_litery.end());
+    vector<string> znalezione_rozwiazania;
+    vector<int> przypisania (posortowane_litery.size());
+    vector<bool> uzyte_cyfry(10, false);
+    
+    rozwiaz_algebraf(0, rownania, posortowane_litery, znalezione_rozwiazania, przypisania, uzyte_cyfry);
+    if (znalezione_rozwiazania.size() == 1) {
+        cout << znalezione_rozwiazania[0] << endl;
+    } else
+    {
+        cout << "BRAK" << endl;
+    }
+
+    return 0;
+}
+
+// */
