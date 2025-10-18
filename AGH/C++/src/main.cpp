@@ -149,12 +149,68 @@ int main() {
 */
 
 
+/**/
+#include <vector>
+#include <string>
+#include <iostream>
+#include <cmath>
+#include <unordered_set>
+#include <algorithm>
+#include <stdexcept>
+
+using namespace std;
 // ================================
 //             Podzialy
 // ================================
 
+bool czy_jest_pierwsza(long long liczba){
+    if (liczba < 2) return false;
+    for (long long i = 2; i * i <= liczba; ++i) if (liczba % i == 0) return false;
+    return true;
+}
+
+bool czy_cyfry_sa_unikalne(const string& fragment) {
+    unordered_set<char> cyfry;
+    for (char c : fragment) {
+        if (cyfry.count(c)) return false;
+        cyfry.insert(c);
+    }
+    return true;
+}
+
+int znajdz_minimalny_podzial(const string& ciag_cyfr) {
+    int dlugosc = ciag_cyfr.size();
+    int nieskonczonosc = dlugosc + 1;
+    vector<int> min_kawalkow(dlugosc + 1, nieskonczonosc);
+    min_kawalkow[0] = 0;
+
+    for (int i = 1; i <= dlugosc; i++){
+        for (int j = 0; j < i; j++){
+            if (min_kawalkow[j] == nieskonczonosc) continue;
+            string fragment = ciag_cyfr.substr(j, i - j);
+
+            if (fragment.size() > 1 && fragment[0] == '0') continue;
+            if (czy_cyfry_sa_unikalne(fragment)) {
+            long long liczba = stoll(fragment);
+
+            if (czy_jest_pierwsza(liczba)) min_kawalkow[i] = min(min_kawalkow[i], min_kawalkow[j] + 1);
+            }
+        }
+    }
+    return min_kawalkow[dlugosc] > dlugosc ? -1 : min_kawalkow[dlugosc];
+}
+
 int main() {
-   return 0;
+    string ciag; cin >> ciag;
+    int wynik = znajdz_minimalny_podzial(ciag);
+    
+    if (wynik == -1 || wynik < 2) {
+        cout << "BRAK\n";
+    } else {
+        cout << wynik << '\n';
+    }
+
+    return 0;
 }
 
 /*

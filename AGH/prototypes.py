@@ -171,7 +171,7 @@ if __name__ == "__main__":
 """
 
 ########### Interpretacja python do zadania algebraf.pdf, do wykonania w C++ ###########
-
+"""
 import itertools
 
 
@@ -232,3 +232,4 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+"""
