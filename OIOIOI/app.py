@@ -60,7 +60,6 @@ zwraca: "TAK" , jeżeli 5 >= 8 * 1 , w przeciwnym wypadku "NIE"
 """
 # ________________________________________________________________________ #
 
-from collections import deque
 import sys
 
 """
