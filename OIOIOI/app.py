@@ -5,7 +5,7 @@ _  Tura I | 13.10.2025   _
 ~~~~   n = 3a + 8b    ~~~~
 ~ min_b = (2(n % 3) % 3) ~
 - Grzegorz Tereszkiewicz -
-************************** 
+**************************
 """
 
 """def sil(ciezar: int) -> str:
@@ -59,7 +59,9 @@ zwraca: "TAK" , jeżeli 5 >= 8 * 1 , w przeciwnym wypadku "NIE"
 
 """
 # ________________________________________________________________________ #
+
 from collections import deque
+import sys
 
 """
 **************************
@@ -70,68 +72,75 @@ _  Tura I | 13.10.2025   _
 """
 
 class Hanoj:
-    def __init__(self, ilosc_klockow: int, ilosc_stosow: int )-> None:
+    def __init__(self, ilosc_klockow: int, ilosc_stostow: int)-> None:
         self.ilosc_klockow = ilosc_klockow
-        self.ilosc_stostow= ilosc_stosow
-        self.stosy = [deque(map(int, input().split()[1:])) for _ in range(ilosc_stosow)]
+        self.ilosc_stostow = ilosc_stostow
+        self.nastepny_klocek = [0] * (ilosc_klockow + 1)
+        self.stos_gornego_klocka = [-1] * (ilosc_klockow + 1)
+        self.pusty = -1
+        self.stos_z_1 = -1
+        for i in range(ilosc_stostow):
+            wiersz_wejscia = sys.stdin.readline().split()
+            ilosc_w_stosie = int(wiersz_wejscia[0])
+            if ilosc_w_stosie == 0:
+                if self.pusty == -1:
+                    self.pusty = i
+                continue
+            gorny_klocek = int(wiersz_wejscia[1])
+            self.stos_gornego_klocka[gorny_klocek] = i
+            if gorny_klocek == 1:
+                self.stos_z_1 = i
+            poprzedni = gorny_klocek
+            for j in range(2, ilosc_w_stosie + 1):
+                obecny = int(wiersz_wejscia[j])
+                self.nastepny_klocek[poprzedni] = obecny
+                poprzedni = obecny
 
-    def han(self) -> None:
-        stos_z_1 = -1
-        for i in range(self.ilosc_stostow):
-            if self.stosy[i] and self.stosy[i][0] == 1:
-                stos_z_1 = i
-                break
-        if stos_z_1 == -1:
-            print (-1)
+    def han(self ) -> None:
+        if self.stos_z_1 == -1:
+            print(-1)
             return
 
-        stos = self.stosy[stos_z_1]
         k = 1
-        for i in range(1, len(stos)):
-            if stos[i] != stos[i-1] + i: break
-            k +=1
-        stos_z_miejscem = k < len(stos)
+        biezacy_klocek = 1
+        while self.nastepny_klocek[biezacy_klocek] and self.nastepny_klocek[biezacy_klocek] == biezacy_klocek + 1:
+            biezacy_klocek = self.nastepny_klocek[biezacy_klocek]
+            k += 1
+        stos_z_miejscem = self.nastepny_klocek[biezacy_klocek] != 0
 
-        pusty = -1
-        for i in range(self.ilosc_stostow):
-            if not self.stosy[i]:
-                pusty = i
-                break
         if stos_z_miejscem:
-            if pusty == -1:
+            if self.pusty == -1:
                 print(-1)
                 return
-            cel = pusty
+            cel = self.pusty
             oczekiwano = 1
             obecny_max = 0
         else:
-            cel = stos_z_1
+            cel = self.stos_z_1
             oczekiwano = k + 1
-            obecny_max = stos[-1]
-
-        gory = {self.stosy[i][0]: i for i in range(self.ilosc_stostow) if self.stosy[i]}
+            obecny_max = biezacy_klocek
 
         ruchy = []
-        for ocz in range(oczekiwano, self. ilosc_klockow + 1):
-            if ocz not in gory:
+        for ocz in range(oczekiwano, self.ilosc_klockow + 1):
+            if self.stos_gornego_klocka[ocz] == -1:
                 print(-1)
                 return
-            a = gory[ocz]
+            a = self.stos_gornego_klocka[ocz]
             if ocz <= obecny_max:
                 print(-1)
                 return
             ruchy.append((a + 1, cel + 1))
-            self.stosy[a].popleft()
-            del gory[ocz]
-            if self.stosy[a]: gory[self.stosy[a][0]] = a
+            self.stos_gornego_klocka[ocz] = -1
+            if self.nastepny_klocek[ocz]:
+                self.stos_gornego_klocka[self.nastepny_klocek[ocz]] = a
             obecny_max = ocz
-        
-        h = len(ruchy)
-        print(h)
-        for ruch in ruchy: print(ruch[0], ruch[1])
+
+        print(len(ruchy))
+        for ruch in ruchy:
+            print(*ruch)
 
 def main() -> None:
-    n, m = map(int, input().split())
+    n, m = map(int, sys.stdin.readline().split())
     han = Hanoj(n, m)
     han.han()
 
