@@ -231,9 +231,83 @@ if __name__ == "__main__":
 
 """
 **************************
-_  Tura I | 02.11.2025   _
+_  Tura I | 07.11.2025   _
 ~~~~~~~~~rpk.pdf~~~~~~~~~~
 - Grzegorz Tereszkiewicz -
 ************************** 
 """
+"""
+from collections import deque
 
+def bfs(start: tuple[int, int], cel: tuple[int, int], plansza: list[list[int]], n: int) -> list[tuple[int, int]] | None:
+    if start == cel: return []
+    kolejka = deque([start])
+    odwiedzone = {start}
+    rodzic = {start: None}
+    
+    while kolejka:
+        poz = kolejka.popleft()
+        if poz == cel:
+            sciezka = []
+            while rodzic[poz]:
+                sciezka.append(rodzic[poz])
+                poz = rodzic[poz]
+            return sciezka[::-1]
+        
+        for dx in [-1, 0, 1]:
+            for dy in [-1, 0, 1]:
+                if dx == 0 and dy == 0: continue
+                nowa = (poz[0] + dx, poz[1] + dy)
+                if 0 <= nowa[0] < n and 0 <= nowa[1] < n and nowa not in odwiedzone and plansza[nowa[0]][nowa[1]] == 0:
+                    odwiedzone.add(nowa)
+                    rodzic[nowa] = poz
+                    kolejka.append(nowa)
+    return None
+
+def main() -> None:
+    n, k = map(int, input().split())
+    plansza = [list(map(int, input().split())) for _ in range(n)]
+    docelowa = [input().split() for _ in range(n)]
+
+    pozycje = {}
+    cele = {}
+    for i in range(n):
+        for j in range(n):
+            if plansza[i][j] > 0: pozycje[plansza[i][j]] = (i, j)
+            if int(docelowa[i][j]) > 0: cele[int(docelowa[i][j])] = (i, j)
+
+    ruchy = []
+    for krol in range(1, k + 1):
+        if pozycje[krol] == cele[krol]: continue
+        sciezka = bfs(pozycje[krol], cele[krol], plansza, n)
+        if not sciezka:
+            print("NIE")
+            exit()
+        for x, y in sciezka:
+            ruchy.append((krol, x + 1, y + 1))
+            plansza[pozycje[krol][0]][pozycje[krol][1]] = 0
+            plansza[x][y] = krol
+            pozycje[krol] = (x, y)
+
+    print("TAK")
+    print(len(ruchy))
+    for ruch in ruchy: print(*ruch)
+if __name__ == "__main__": main()
+"""
+
+
+# ________________________________________________________________________ #
+
+"""
+**************************
+_  Tura I | 07.11.2025   _
+~~~~~~~~~dos.pdf~~~~~~~~~~
+- Grzegorz Tereszkiewicz -
+************************** 
+"""
+
+
+
+def main() -> None:
+    ...
+if __name__ == "__main__": main()
