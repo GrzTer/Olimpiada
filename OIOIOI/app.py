@@ -7,6 +7,7 @@ _  Tura I | 13.10.2025   _
 - Grzegorz Tereszkiewicz -
 **************************
 """
+from math import frexp
 
 """def sil(ciezar: int) -> str:
     if ciezar > 13:
@@ -297,17 +298,146 @@ if __name__ == "__main__": main()
 
 
 # ________________________________________________________________________ #
-
 """
 **************************
-_  Tura I | 07.11.2025   _
+_  Tura I | 09.11.2025   _
 ~~~~~~~~~dos.pdf~~~~~~~~~~
 - Grzegorz Tereszkiewicz -
 ************************** 
 """
 
 
+"""
+from collections import deque
+def wyznacz_odleglosci(n: int, zablokowane: list[bool], start_indeks: int) -> tuple[list[int], int]:
+    N = n * n
+    odleglosci = [-1] * N
+    odleglosci[start_indeks] = 0
+    kolejka = deque([start_indeks])
+    najwieksza = 0
+    while kolejka:
+        pole = kolejka.popleft()
+        nowa = odleglosci[pole] + 1
+        r = pole // n
+        c = pole - r * n
+        if c > 0:
+            s = pole - 1
+            if odleglosci[s] == -1 and not zablokowane[s]:
+                odleglosci[s] = nowa
+                kolejka.append(s)
+                if nowa > najwieksza: najwieksza = nowa
+        if c + 1 < n:
+            s = pole + 1
+            if odleglosci[s] == -1 and not zablokowane[s]:
+                odleglosci[s] = nowa
+                kolejka.append(s)
+                if nowa > najwieksza: najwieksza = nowa
+        if r > 0:
+            s = pole - n
+            if odleglosci[s] == -1 and not zablokowane[s]:
+                odleglosci[s] = nowa
+                kolejka.append(s)
+                if nowa > najwieksza: najwieksza = nowa
+        if r + 1 < n:
+            s = pole + n
+            if odleglosci[s] == -1 and not zablokowane[s]:
+                odleglosci[s] = nowa
+                kolejka.append(s)
+                if nowa > najwieksza: najwieksza = nowa
+    return odleglosci, najwieksza
+
+def zbuduj_czestosci_fortow(jest_fort: list[bool], odleglosci: list[int], najwieksza: int) -> tuple[list[int], int]:
+    czestosci = [0] * (najwieksza + 1)
+    liczba_fortow = 0
+    for i, stan in enumerate(jest_fort):
+        if stan:
+            d = odleglosci[i]
+            czestosci[d] += 1
+            liczba_fortow += 1
+    return czestosci, liczba_fortow
+
+def policz_wynik_z_czestosci(czestosci: list[int]) -> int:
+    if sum(czestosci) == 0: return 0
+    najlepszy = 0
+    sufiks = 0
+    for d in range(len(czestosci) - 1, -1, -1):
+        sufiks += czestosci[d]
+        k = d + sufiks - 1
+        if k > najlepszy: najlepszy = k
+    return najlepszy
+
+def przelacz_fort(x: int, y: int, n: int, jest_fort: list[bool], odleglosci: list[int], czestosci: list[int]) -> int:
+    i = (x - 1) * n + (y - 1)
+    d = odleglosci[i]
+    if jest_fort[i]:
+        jest_fort[i] = False
+        czestosci[d] -= 1
+        return -1
+    else:
+        jest_fort[i] = True
+        czestosci[d] += 1
+        return +1
+
+def wczytaj_zmiany(q: int) -> list[tuple[int, int]]:
+    zmiany: list[tuple[int, int]] = []
+    while len(zmiany) < q:
+        w = input()
+        if not w: continue
+        p = w.strip().split()
+        if len(p) < 2: continue
+        x, y = int(p[0]), int(p[1])
+        zmiany.append((x, y))
+    return zmiany
 
 def main() -> None:
-    ...
-if __name__ == "__main__": main()
+    pierwsza = ""
+    while not pierwsza:
+        pierwsza = input().strip()
+    n_str, q_str = pierwsza.split()
+    n = int(n_str)
+    q = int(q_str)
+
+    plansza: list[str] = []
+    while len(plansza) < n:
+        w = input()
+        if not w: continue
+        plansza.append(w.strip())
+    zmiany = wczytaj_zmiany(q)
+
+    N = n * n
+    zablokowane = [False] * N
+    jest_fort = [False] * N
+    start = 0
+
+    for r in range(n):
+        w = plansza[r]
+        b = r * n
+        for c in range(n):
+            ch = w[c]
+            i = b + c
+            if ch == '#': zablokowane[i] = True
+            elif ch == 'F': jest_fort[i] = True
+            elif ch == 'Z': start = i
+
+    odleglosci, najw = wyznacz_odleglosci(n, zablokowane, start)
+    czestosci, liczba_fortow = zbuduj_czestosci_fortow(jest_fort, odleglosci, najw)
+
+    wyniki: list[int] = []
+    wyniki.append(policz_wynik_z_czestosci(czestosci))
+    for x, y in zmiany:
+        liczba_fortow += przelacz_fort(x, y, n, jest_fort, odleglosci, czestosci)
+        wyniki.append(policz_wynik_z_czestosci(czestosci))
+
+    print("\n".join(map(str, wyniki)))
+
+if __name__ == "__main__":main()
+"""
+
+# ________________________________________________________________________ #
+"""
+**************************
+_  Tura I | 09.11.2025   _
+~~~~~~~~~lzk.pdf~~~~~~~~~~
+- Grzegorz Tereszkiewicz -
+************************** 
+"""
