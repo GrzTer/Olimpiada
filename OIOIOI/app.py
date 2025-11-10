@@ -7,6 +7,7 @@ _  Tura I | 13.10.2025   _
 - Grzegorz Tereszkiewicz -
 **************************
 """
+
 from math import frexp
 
 """def sil(ciezar: int) -> str:
@@ -434,10 +435,53 @@ if __name__ == "__main__":main()
 """
 
 # ________________________________________________________________________ #
+
+import sys
+from math import gcd
+
 """
 **************************
-_  Tura I | 09.11.2025   _
-~~~~~~~~~lzk.pdf~~~~~~~~~~
+_  Tura I | 10.11.2025   _
+~~~~~~~~~laz.pdf~~~~~~~~~~
 - Grzegorz Tereszkiewicz -
 ************************** 
 """
+
+import sys
+from math import gcd
+
+def generuj_sekwencje(n: int, m: int) -> tuple[int, str]:
+    nwd = gcd(n, m)
+    k = max(2, nwd)
+    mozliwe_a = []
+    for a in range(1, k):
+        if gcd(a, n) == 1 and gcd(k - a, m) == 1: mozliwe_a.append(a)
+    if not mozliwe_a:
+        ruch1 = "D" if n <= m else "P"
+        ruch2 = "P" if n <= m else "D"
+        ciag = ""
+        for i in range(k):
+            if i % 2 == 0: ciag += ruch1
+            else: ciag += ruch2
+        return k, ciag
+    if n > m: a = max(mozliwe_a)
+    else: a = min(mozliwe_a)
+    b = k - a
+    pion = "D"
+    poziom = "P"
+    if a > b: ciag = pion * a + poziom * b
+    else: ciag = poziom * b + pion * a
+    return k, ciag
+
+def main() -> None:
+    n, m = map(int, sys.stdin.readline().split())
+    k, sekwencja = generuj_sekwencje(n, m)
+    sys.stdout.write(f"{k}\n")
+    sys.stdout.write(f"{sekwencja}\n")
+
+if __name__ == "__main__":
+    main()
+
+
+
+# ____________________________________KONIEC____________________________________ #
